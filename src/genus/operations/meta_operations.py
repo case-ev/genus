@@ -4,11 +4,12 @@ genus.operations.meta_operations
 Operations that use other operations as a base.
 """
 
-from typing import Callable, Iterator
+from typing import Callable, Iterator, List
 
 from genus_utils.logger import LOGGER
 
 from genus.operations.operation import Operation
+from genus.population import Population
 
 
 class Sequential(Operation):
@@ -39,9 +40,12 @@ class Sequential(Operation):
         return x
 
 
-class Identity(Operation):
-    """Operation that does nothing"""
+class Parallel(Operation):
+    """Apply multiple operations on parallel"""
 
-    def forward(self, x: object) -> object:
-        LOGGER.debug("Applying Identity operation")
-        return x
+    def __init__(self, *operations: Operation) -> None:
+        super().__init__()
+        self.operations = operations
+
+    def forward(self, x: object) -> List:
+        return [op(x) for op in self.operations]
