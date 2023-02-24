@@ -23,8 +23,8 @@ def test_creation():
     assert c1.size == 10
     assert c2.size == 10
 
-    c1 = Chromosome(10, criterion="random")
-    c2 = Chromosome(10, criterion="random")
+    c1 = Chromosome(10, criterion="random_binary")
+    c2 = Chromosome(10, criterion="random_binary")
     c1_copy = Chromosome(code=c1.code)
     c2_copy = Chromosome(code=c2.code)
     assert c1 == c1_copy
@@ -34,8 +34,8 @@ def test_creation():
     assert c1.size == 10
     assert c2.size == 10
 
-    empty_c1 = Chromosome(0, criterion="random")
-    empty_c2 = Chromosome(0, criterion="random")
+    empty_c1 = Chromosome(0, criterion="random_binary")
+    empty_c2 = Chromosome(0, criterion="random_binary")
     assert empty_c1.code == ""
     assert empty_c2.code == ""
     assert empty_c1 == empty_c2
@@ -54,8 +54,8 @@ def test_str():
     assert repr(c1) == "Chromosome(size=8, code='01010101', criterion='random')"
     assert str(c1) == "01010101"
 
-    empty_c1 = Chromosome(0, criterion="random")
-    empty_c2 = Chromosome(0, criterion="random")
+    empty_c1 = Chromosome(0, criterion="random_binary")
+    empty_c2 = Chromosome(0, criterion="random_binary")
     assert empty_c1.code == ""
     assert empty_c2.code == ""
     assert repr(empty_c1) == "Chromosome(size=0, code='', criterion='random')"
