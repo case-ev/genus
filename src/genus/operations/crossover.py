@@ -11,6 +11,7 @@ import numpy as np
 
 from genus_utils.logger import LOGGER
 
+from genus.exceptions import UnmatchingSizesException
 from genus.chromosome import Chromosome, concatenate
 from genus.population import Population
 from genus.operations.operation import Operation
@@ -56,15 +57,21 @@ def cross_pair(
     return concatenate(*a_components), concatenate(*b_components)
 
 
+def _probfn_normalize(pop):
+    fitness_vals = pop.member_fitness()
+    total_fitness = np.sum(fitness_vals)
+    return [f / total_fitness for f in fitness_vals]
+
+
 class BinaryCrossover(Operation):
     """Binary crossover operation, whick uses two parents"""
 
-    def __init__(self, fitness: Callable[[Chromosome], float], size=None, cross_num=1, cross_probability=1) -> None:
+    def __init__(self, size=None, cross_num=1, cross_probability=1, probability_function: Callable[[Population], float] = _probfn_normalize) -> None:
         super().__init__()
-        self.fitness = fitness
         self.size = size
         self.cross_num = cross_num
         self.cross_probability = cross_probability
+        self._prob_fn = probability_function
 
     def forward(self, x: Population) -> Population:
         LOGGER.debug(
@@ -72,8 +79,23 @@ class BinaryCrossover(Operation):
             100 * self.cross_probability,
         )
         rng = np.random.default_rng()
+        probabilities = self._prob_fn(x)
 
+        # If self mating occurs it would mean that the parent has an amazing fitness
+        parents = rng.choice(x, 2 * self.size, p=probabilities)
+        children = []
+        p1 = parents[::2]
+        p2 = parents[1::2]
+        for a, b in zip(p1, p2):
+            if rng.random() <= self.cross_probability:
+                children.extend(cross_pair(a, b, self.cross_num))
+            else:
+                children.extend((a, b))
 
+        if (l := len(children)) != self.size:
+            LOGGER.error("Size of children and origin do not match")
+            raise UnmatchingSizesException(l, self.size)
+        return children
 
         # size = self.size
         # remaining = None
