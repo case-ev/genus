@@ -86,3 +86,58 @@ class Population:
     def std_fitness(self) -> float:
         """Get the standard deviation of fitness"""
         return np.std(self.member_fitness())
+
+    def join(self, *populations, fitness: Callable[[Chromosome], float] = None) -> Self:
+        """Join this population to a series of other populations. If
+        no fitness function is given, it takes the one from this population.
+
+        Parameters
+        ----------
+        *populations: Population
+            Populations to join.
+        fitness: Callable[[Chromosome], float], optional
+            Fitness function to use, by default None. If None, it uses the
+            fitness function of this population.
+
+        Returns
+        -------
+        Population
+            Joint population.
+        """
+        return join(
+            self,
+            *populations,
+            fitness=self.fitness_function if fitness is None else fitness,
+        )
+
+
+###############################################################################
+# |==========================| Basic operations |===========================| #
+###############################################################################
+
+
+def join(
+    *populations: Population, fitness: Callable[[Chromosome], float] = None
+) -> Population:
+    """Join a series of populations. If no fitness function is given,
+    it takes the one from the first population.
+
+    Parameters
+    ----------
+    *populations: Population
+        Populations to join.
+    fitness: Callable[[Chromosome], float], optional
+        Fitness function to use, by default None. If None, it uses the
+        fitness function of the first population.
+
+    Returns
+    -------
+    Population
+        Joint population.
+    """
+    members = []
+    for p in populations:
+        members.extend(p.members)
+    return Population(
+        members, populations[0].fitness_function if fitness is None else fitness
+    )
