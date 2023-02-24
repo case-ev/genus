@@ -5,5 +5,6 @@ genus
 using genetic algorithms.
 """
 
-from .chromosome import *
 from .operations import *
+from .chromosome import *
+from .population import *

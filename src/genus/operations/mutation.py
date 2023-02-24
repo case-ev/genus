@@ -8,7 +8,7 @@ from typing import List
 
 import numpy as np
 
-from genus.chromosome import Chromosome
+from genus.population import Population
 from genus.operations.operation import Operation
 
 
@@ -25,7 +25,7 @@ class Mutation(Operation):
         super().__init__()
         self.prob = mutation_probability
 
-    def forward(self, x: List[Chromosome]) -> List[Chromosome]:
+    def forward(self, x: Population) -> Population:
         for c in x:
             for i, bit in enumerate(c):
                 if np.random.default_rng().random() <= self.prob:

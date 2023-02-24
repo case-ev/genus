@@ -10,6 +10,7 @@ from typing import Callable, List
 from genus_utils.logger import LOGGER
 
 from genus.chromosome import Chromosome
+from genus.population import Population
 from genus.operations.operation import Operation
 
 
@@ -44,7 +45,7 @@ class ElitismSelection(Operation):
         self.amount = amount
         self.proportion = proportion
 
-    def forward(self, x: List[Chromosome]) -> List[Chromosome]:
+    def forward(self, x: Population) -> Population:
         LOGGER.debug("Doing forward pass of ElitismSelection")
         values = sorted(x, key=self.fitness, reverse=True)
         if self.amount is not None:
