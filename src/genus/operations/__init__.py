@@ -9,6 +9,7 @@ way PyTorch handles operations. In this sense, `Operation` would be similar
 to `torch.nn.Module`, even using similar conventions for some names.
 """
 
-from .operation import Operation
+from .crossover import *
 from .meta_operations import *
+from .operation import Operation
 from .selection import *
