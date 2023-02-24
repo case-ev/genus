@@ -60,7 +60,11 @@ def cross_pair(
 def _probfn_normalize(pop):
     fitness_vals = pop.member_fitness()
     total_fitness = np.sum(fitness_vals)
-    return [f / total_fitness for f in fitness_vals]
+    if total_fitness == 0:
+        values = [1 / len(fitness_vals) for _ in fitness_vals]
+    else:
+        values = [f / total_fitness for f in fitness_vals]
+    return values
 
 
 class BinaryCrossover(Operation):
