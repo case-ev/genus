@@ -1,6 +1,6 @@
 """Unit tests for Chromosome"""
 
-from genus import Chromosome, concatenate
+from genus import Chromosome, concatenate, split
 
 
 def test_creation():
@@ -51,15 +51,15 @@ def test_str():
     c2 = Chromosome(code="01010101")
     assert repr(c1) == repr(c2)
     assert str(c1) == str(c2)
-    assert repr(c1) == "Chromosome(size=8, code='01010101', criterion='random')"
+    assert repr(c1) == "Chromosome(size=8, code='01010101', criterion='random_binary')"
     assert str(c1) == "01010101"
 
     empty_c1 = Chromosome(0, criterion="random_binary")
     empty_c2 = Chromosome(0, criterion="random_binary")
     assert empty_c1.code == ""
     assert empty_c2.code == ""
-    assert repr(empty_c1) == "Chromosome(size=0, code='', criterion='random')"
-    assert repr(empty_c2) == "Chromosome(size=0, code='', criterion='random')"
+    assert repr(empty_c1) == "Chromosome(size=0, code='', criterion='random_binary')"
+    assert repr(empty_c2) == "Chromosome(size=0, code='', criterion='random_binary')"
     assert str(empty_c1) == ""
     assert str(empty_c2) == ""
 
@@ -75,3 +75,21 @@ def test_concatenation():
     assert str(concatenate(c1, c2, c3, empty_c1, reverse=True)) == "010111110000"
     assert concatenate(c1, c2, c3, empty_c1) == c1.concatenate(c2, c3, empty_c1)
     assert concatenate(c1, c2, c3, empty_c1, reverse=True) == empty_c1.concatenate(c3, c2, c1)
+
+
+def test_split():
+    """Test for splitting of chromosomes"""
+    c = Chromosome(code="000011110011")
+
+    c1 = split(c, 4)
+    c2 = c.split(4)
+    assert str(c1[0]) == "0000"
+    assert str(c1[1]) == "11110011"
+    assert str(c2[0]) == "0000"
+    assert str(c2[1]) == "11110011"
+
+    c1 = c.split((4, 8, 10))
+    assert str(c1[0]) == "0000"
+    assert str(c1[1]) == "1111"
+    assert str(c1[2]) == "00"
+    assert str(c1[3]) == "11"
