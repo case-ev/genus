@@ -13,6 +13,7 @@ class Sequential(Operation):
     """Series of operations applied sequentally"""
 
     def __init__(self, *operations: Operation) -> None:
+        super().__init__()
         self.operations = operations
 
     def __iter__(self) -> Iterator[Operation]:
