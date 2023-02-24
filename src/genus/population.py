@@ -27,6 +27,8 @@ class Population:
         cls,
         member_total: int,
         chrom_size: int,
+        fitness: Callable[[Chromosome], float],
+        *,
         criterion: str = "random_binary",
         criterion_kwargs: Dict = None,
         **kwargs
@@ -55,6 +57,7 @@ class Population:
                 Chromosome.from_size(chrom_size, criterion, **criterion_kwargs)
                 for _ in range(member_total)
             ],
+            fitness,
             **kwargs,
         )
 
@@ -78,9 +81,17 @@ class Population:
         """Get the max fitness"""
         return np.max(self.member_fitness())
 
+    def max_member(self) -> Chromosome:
+        """Get the chromosome with the max fitness"""
+        return self.members()[np.argmax(self.member_fitness())]
+
     def min_fitness(self) -> float:
         """Get the min fitness"""
         return np.min(self.member_fitness())
+
+    def min_member(self) -> Chromosome:
+        """Get the chromosome with the min fitness"""
+        return self.members()[np.argmin(self.member_fitness())]
 
     def mean_fitness(self) -> float:
         """Get the average fitness"""
@@ -141,6 +152,4 @@ def join(
     members = []
     for p in populations:
         members.extend(p.members)
-    return Population(
-        members, populations[0].fitness if fitness is None else fitness
-    )
+    return Population(members, populations[0].fitness if fitness is None else fitness)
