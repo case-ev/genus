@@ -31,12 +31,6 @@ class Chromosome:
         """Create a chromosome from a size and a criterion"""
         return cls(globals()[f"__chromosome_init_{criterion}"](size, **kwargs))
 
-    def __setitem__(self, key: object, bit: str) -> None:
-        self.code[key] = bit
-
-    def __getitem__(self, key: object) -> str:
-        return self.code[key]
-
     def __eq__(self, obj: object) -> bool:
         if isinstance(obj, type(self)):
             return self.code == obj.code
@@ -149,10 +143,10 @@ def split(c: Chromosome, idx: List[int]) -> List[Chromosome]:
         Cut up chromosome.
     """
     try:
-        result = [Chromosome(code=c[:idx[0]])]
-        result.extend([Chromosome(code=c[p:idx[i + 1]]) for i, p in enumerate(idx[:-1])])
-        result.append(Chromosome(code=c[idx[-1]:]))
+        result = [Chromosome(code=c.code[:idx[0]])]
+        result.extend([Chromosome(code=c.code[p:idx[i + 1]]) for i, p in enumerate(idx[:-1])])
+        result.append(Chromosome(code=c.code[idx[-1]:]))
     except TypeError:
         # Raised when there is a single place
-        result = [Chromosome(code=c[:idx]), Chromosome(code=c[idx:])]
+        result = [Chromosome(code=c.code[:idx]), Chromosome(code=c.code[idx:])]
     return result
