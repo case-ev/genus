@@ -9,7 +9,6 @@ from typing import Callable, Iterator, List
 from genus_utils.logger import LOGGER
 
 from genus.operations.operation import Operation
-from genus.population import Population
 
 
 class Sequential(Operation):

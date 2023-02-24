@@ -4,7 +4,7 @@ genus.operations.elementary
 Elementary operations between Populations.
 """
 
-from typing import List
+from typing import Iterator
 
 from genus_utils.logger import LOGGER
 
@@ -23,5 +23,5 @@ class Identity(Operation):
 class Join(Operation):
     """Join multiple populations"""
 
-    def forward(self, x: List[Population]) -> Population:
+    def forward(self, x: Iterator[Population]) -> Population:
         return join(*x)

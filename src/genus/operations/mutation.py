@@ -4,11 +4,11 @@ genus.operations.mutation
 Code for the mutation of chromosomes.
 """
 
-from typing import List
+from typing import Iterator
 
 import numpy as np
 
-from genus.population import Population
+from genus.chromosome import Chromosome
 from genus.operations.operation import Operation
 
 
@@ -25,7 +25,7 @@ class Mutation(Operation):
         super().__init__()
         self.prob = mutation_probability
 
-    def forward(self, x: Population) -> Population:
+    def forward(self, x: Iterator[Chromosome]) -> Iterator[Chromosome]:
         for c in x:
             for i, bit in enumerate(c):
                 if np.random.default_rng().random() <= self.prob:

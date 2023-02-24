@@ -20,7 +20,6 @@ class ElitismSelection(Operation):
 
     def __init__(
         self,
-        fitness: Callable[[Chromosome], float],
         amount: int = None,
         proportion: float = None,
     ) -> None:
@@ -28,9 +27,6 @@ class ElitismSelection(Operation):
 
         Parameters
         ----------
-        fitness : Callable[[Chromosome], float]
-            Fitness function that takes a chromosome and scores how strong
-            it is. A higher value means better offspring.
         amount : int, optional
             Amount of chromosomes to choose as the best, by default None. If
             specified, it takes precedence over whatever value is indicated
@@ -41,17 +37,16 @@ class ElitismSelection(Operation):
             it takes all the values.
         """
         super().__init__()
-        self.fitness = fitness
         self.amount = amount
         self.proportion = proportion
 
     def forward(self, x: Population) -> Population:
         LOGGER.debug("Doing forward pass of ElitismSelection")
-        values = sorted(x, key=self.fitness, reverse=True)
+        values = sorted(x.members, key=x.fitness, reverse=True)
         if self.amount is not None:
-            return values[:self.amount]
+            return Population(values[:self.amount], x.fitness)
         if self.proportion is not None:
             size = int(len(values) * self.proportion)
-            return values[:size]
+            return Population(values[:size], x.fitness)
         LOGGER.warning("Neither amount or proportion were specified, returning all values")
-        return values
+        return Population(values, x.fitness)
