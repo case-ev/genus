@@ -16,13 +16,11 @@ def __chromosome_init_zero(size, **_):
 
 
 def __chromosome_init_random_binary(size, p=0.5, **_):
-    return "".join((Chromosome.RNG.random(size) <= p).astype(int).astype(str))
+    return "".join((np.random.default_rng().random(size) <= p).astype(int).astype(str))
 
 
 class Chromosome:
     """Chromosome containing some genetic code for an organism"""
-
-    RNG = np.random.default_rng()
 
     def __init__(
         self, size: int = None, code: str = None, criterion: str = "random_binary", **kwargs
