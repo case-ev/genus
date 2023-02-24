@@ -46,6 +46,13 @@ class Chromosome:
     def __len__(self) -> int:
         return self.size
 
+    def __repr__(self) -> str:
+        return f"Chromosome(size={repr(self.size)}, code={repr(self.code)}, \
+criterion={repr(self.criterion)})"
+
+    def __str__(self) -> str:
+        return self.code
+
     @property
     def criterion(self) -> str:
         """Criterion used for the initialization of the chromosome"""
@@ -120,9 +127,7 @@ def concatenate(*chromosomes, reverse=False) -> Chromosome:
     Chromosome
         Concatenated chromosome.
     """
-    size = 0
     code = ""
     for c in chromosomes:
-        size += c.size
         code = f"{c.code}{code}" if reverse else f"{code}{c.code}"
     return Chromosome(code=code, criterion=chromosomes[0].criterion)
