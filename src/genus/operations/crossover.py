@@ -55,8 +55,8 @@ def cross_pair(
     return concatenate(*a_components), concatenate(*b_components)
 
 
-class Crossover(Operation):
-    """Crossover operation"""
+class BinaryCrossover(Operation):
+    """Binary crossover operation, whick uses two parents"""
 
     def __init__(self, size=None, cross_num=1, cross_probability=1) -> None:
         super().__init__()

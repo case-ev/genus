@@ -3,8 +3,8 @@
 import genus
 
 
-def test_1():
-    """Test 1 for crossover"""
+def test_binary():
+    """Test binary crossover"""
     c1 = genus.Chromosome(code="000000000000")
     c2 = genus.Chromosome(code="111111111111")
 
