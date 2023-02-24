@@ -12,5 +12,6 @@ to `torch.nn.Module`, even using similar conventions for some names.
 from .crossover import *
 from .elementary import *
 from .meta_operations import *
+from .mutation import *
 from .operation import Operation
 from .selection import *
