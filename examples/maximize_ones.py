@@ -5,6 +5,8 @@ Example to show a program that maximizes the number of ones in a string
 using genetic algorithms.
 """
 
+from tqdm import tqdm
+
 from genus_utils.logger import LOGGER
 import genus
 
@@ -23,6 +25,7 @@ def main(
     cross_prob=1,
     mut_prob=0.001,
     generations=200,
+    criterion="random_binary",
 ):
     """Maximize the number of ones in a string"""
     LOGGER.info("Parsing input arguments")
@@ -37,7 +40,7 @@ def main(
 
     LOGGER.info("Creating population")
     population = genus.Population.from_num(
-        members, chrom_size, _fitness, criterion_kwargs={"p": one_prob}
+        members, chrom_size, _fitness, criterion=criterion, criterion_kwargs={"p": one_prob}
     )
     pipeline = genus.Sequential(
         genus.Parallel(
@@ -48,8 +51,8 @@ def main(
         genus.Mutation(mut_prob),
     )
 
-    for _ in range(generations):
+    for _ in (prog_bar := tqdm(range(generations), desc="Optimizing")):
         population = pipeline(population)
-        print(population.max_fitness(), population.mean_fitness())
+        prog_bar.desc = f"Optimizing, current best is {population.max_member()}"
 
     print(f"Best chromosome: {population.max_member()}")
