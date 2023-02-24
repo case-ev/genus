@@ -1,6 +1,6 @@
 """Unit tests for elitism selection."""
 
-from genus import Chromosome, ElitismSelection
+import genus
 
 
 def _basic_fitness(chromosome):
@@ -9,15 +9,15 @@ def _basic_fitness(chromosome):
 
 def test_basic():
     """Test elitism with a basic fitness function"""
-    chromosomes = [Chromosome("1" * i + "0" * (10 - i)) for i in range(11)]
-    sel = ElitismSelection(_basic_fitness, 5)
-    chosen = sel(chromosomes)
+    chromosomes = [genus.Chromosome("1" * i + "0" * (10 - i)) for i in range(11)]
+    sel = genus.ElitismSelection(5)
+    chosen = sel(genus.Population(chromosomes, _basic_fitness))
     assert len(chosen) == 5
     for c in chosen:
         assert c.code.count("1") >= 6
 
-    sel = ElitismSelection(_basic_fitness, proportion=0.5)
-    chosen = sel(chromosomes)
+    sel = genus.ElitismSelection(proportion=0.5)
+    chosen = sel(genus.Population(chromosomes, _basic_fitness))
     assert len(chosen) == 5
     for c in chosen:
         assert c.code.count("1") >= 6

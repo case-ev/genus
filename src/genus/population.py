@@ -20,7 +20,7 @@ class Population:
         fitness: Callable[[Chromosome], float],
     ) -> None:
         self.members = members
-        self.fitness_function = fitness
+        self.fitness = fitness
 
     @classmethod
     def from_num(
@@ -67,9 +67,12 @@ class Population:
     def __iter__(self) -> Iterator[Chromosome]:
         return iter(self.members)
 
+    def __len__(self) -> int:
+        return len(self.members)
+
     def member_fitness(self) -> List[float]:
         """Get the fitness of all members"""
-        return [self.fitness_function(c) for c in self.members]
+        return [self.fitness(c) for c in self.members]
 
     def max_fitness(self) -> float:
         """Get the max fitness"""
@@ -107,7 +110,7 @@ class Population:
         return join(
             self,
             *populations,
-            fitness=self.fitness_function if fitness is None else fitness,
+            fitness=self.fitness if fitness is None else fitness,
         )
 
 
@@ -139,5 +142,5 @@ def join(
     for p in populations:
         members.extend(p.members)
     return Population(
-        members, populations[0].fitness_function if fitness is None else fitness
+        members, populations[0].fitness if fitness is None else fitness
     )
