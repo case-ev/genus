@@ -6,3 +6,4 @@ using genetic algorithms.
 """
 
 from .chromosome import *
+from .operations import *
