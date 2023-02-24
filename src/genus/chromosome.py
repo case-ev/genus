@@ -23,12 +23,13 @@ class Chromosome:
         self._criterion_func = globals()[f"__chromosome_init_{criterion}"]
         self._size = size
         self.code = self._criterion_func(size, **kwargs) if code is None else code
-        if (real_size := len(self.code)) != size and size is not None:
-            LOGGER.warning(
-                "Specified code doesn't match the given size. Changing \
-size to %s",
-                real_size,
-            )
+        if (real_size := len(self.code)) != size:
+            if size is not None:
+                LOGGER.warning(
+                    "Specified code doesn't match the given size. Changing \
+    size to %s",
+                    real_size,
+                )
             self._size = real_size
 
     def __setitem__(self, key: object, bit: str) -> None:
@@ -36,6 +37,14 @@ size to %s",
 
     def __getitem__(self, key: object) -> str:
         return self.code[key]
+
+    def __eq__(self, obj: object) -> bool:
+        if isinstance(obj, type(self)):
+            return self.code == obj.code
+        return False
+
+    def __len__(self) -> int:
+        return self.size
 
     @property
     def criterion(self) -> str:
