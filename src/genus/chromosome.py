@@ -90,7 +90,7 @@ def __chromosome_init_zero(size, **_):
 
 
 def __chromosome_init_random(size, p=0.5, **_):
-    return "".join((Chromosome.RNG.random(size) >= p).astype(int).astype(str))
+    return "".join((Chromosome.RNG.random(size) <= p).astype(int).astype(str))
 
 
 def concatenate(*chromosomes, reverse=False) -> Chromosome:
