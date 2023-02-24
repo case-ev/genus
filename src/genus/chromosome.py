@@ -31,6 +31,12 @@ size to %s",
             )
             self._size = real_size
 
+    def __setitem__(self, key: object, bit: str) -> None:
+        self.code[key] = bit
+
+    def __getitem__(self, key: object) -> str:
+        return self.code[key]
+
     @property
     def criterion(self) -> str:
         """Criterion used for the initialization of the chromosome"""
