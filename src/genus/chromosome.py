@@ -4,7 +4,7 @@ genus.chromosome
 Code for the creation of chromosomes, which act as the basic data structure.
 """
 
-from typing import List, Self
+from typing import List, Self, Iterator
 
 import numpy as np
 
@@ -60,6 +60,9 @@ criterion={repr(self.criterion)})"
 
     def __str__(self) -> str:
         return self.code
+
+    def __iter__(self) -> Iterator[str]:
+        return iter(self.code)
 
     @property
     def criterion(self) -> str:
