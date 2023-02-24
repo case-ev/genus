@@ -4,7 +4,7 @@ genus.operations.meta_operations
 Operations that use other operations as a base.
 """
 
-from typing import Iterator
+from typing import Callable, Iterator
 
 from genus.operations.operation import Operation
 
@@ -12,16 +12,27 @@ from genus.operations.operation import Operation
 class Sequential(Operation):
     """Series of operations applied sequentally"""
 
-    def __init__(self, *operations: Operation) -> None:
+    def __init__(
+        self,
+        *operations: Operation,
+        _update_function: Callable[[object, Operation], None] = None
+    ) -> None:
         super().__init__()
         self.operations = operations
+
+        # _update_function is useful for debugging
+        self._update_function = _update_function
 
     def __iter__(self) -> Iterator[Operation]:
         return iter(self.operations)
 
     def forward(self, x: object) -> object:
         for op in self:
+            if self._update_function is not None:
+                self._update_function(x, op)
             x = op(x)
+        if self._update_function is not None:
+            self._update_function(x, None)
         return x
 
 
