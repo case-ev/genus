@@ -9,7 +9,7 @@ def _basic_fitness(chromosome):
 
 def test_basic():
     """Test elitism with a basic fitness function"""
-    chromosomes = [Chromosome(code="1" * i + "0" * (10 - i)) for i in range(11)]
+    chromosomes = [Chromosome("1" * i + "0" * (10 - i)) for i in range(11)]
     sel = ElitismSelection(_basic_fitness, 5)
     chosen = sel(chromosomes)
     assert len(chosen) == 5
