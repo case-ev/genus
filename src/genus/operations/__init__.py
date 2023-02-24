@@ -11,3 +11,4 @@ to `torch.nn.Module`, even using similar conventions for some names.
 
 from .operation import Operation
 from .meta_operations import *
+from .selection import *
