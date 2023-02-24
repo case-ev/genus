@@ -12,10 +12,13 @@ from genus.chromosome import Chromosome
 from genus.operations.operation import Operation
 
 
-def _flip_bit(bit):
-    if bit == "0":
-        return "1"
-    return "0"
+def _flip_bit(code, idx):
+    bit = code[idx]
+    if bit == "1":
+        bit = "0"
+    else:
+        bit = "1"
+    return f"{code[:idx]}{bit}{code[idx + 1:]}"
 
 
 class Mutation(Operation):
@@ -27,7 +30,7 @@ class Mutation(Operation):
 
     def forward(self, x: Iterator[Chromosome]) -> Iterator[Chromosome]:
         for c in x:
-            for i, bit in enumerate(c):
+            for i, _ in enumerate(c):
                 if np.random.default_rng().random() <= self.prob:
-                    c[i] = _flip_bit(bit)
+                    c.code = _flip_bit(c.code, i)
         return x

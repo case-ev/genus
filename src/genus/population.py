@@ -83,7 +83,7 @@ class Population:
 
     def max_member(self) -> Chromosome:
         """Get the chromosome with the max fitness"""
-        return self.members()[np.argmax(self.member_fitness())]
+        return self.members[np.argmax(self.member_fitness())]
 
     def min_fitness(self) -> float:
         """Get the min fitness"""
@@ -91,7 +91,7 @@ class Population:
 
     def min_member(self) -> Chromosome:
         """Get the chromosome with the min fitness"""
-        return self.members()[np.argmin(self.member_fitness())]
+        return self.members[np.argmin(self.member_fitness())]
 
     def mean_fitness(self) -> float:
         """Get the average fitness"""
