@@ -65,6 +65,10 @@ class BinaryCrossover(Operation):
         self.cross_probability = cross_probability
 
     def forward(self, x: List[Chromosome]) -> List[Chromosome]:
+        LOGGER.debug(
+            "Applying crossover operation with probability %.2f%%",
+            100 * self.cross_probability,
+        )
         rng = np.random.default_rng()
 
         size = self.size
@@ -74,12 +78,19 @@ class BinaryCrossover(Operation):
                 # We remove the odd element
                 remaining = x.pop()
             size = l // 2
+        LOGGER.debug("Applying crossover to size %i", size)
 
         # Choose the first `size` elements
         rng.shuffle(x)
-        group1 = x[:size + 2:2]
-        group2 = x[1:size + 3:2]
-        result = x[2 * size:]       # Puts the remaining ones in `result`
+        group1 = x[: size + 2 : 2]
+        group2 = x[1 : size + 3 : 2]
+        result = x[2 * size :]  # Puts the remaining ones in `result`
+        LOGGER.debug(
+            "Chose sizes %i, %i and remaining are %i",
+            len(group1),
+            len(group2),
+            len(result) + int(remaining is not None),
+        )
 
         # Apply the crossover
         for a, b in zip(group1, group2):
@@ -87,6 +98,9 @@ class BinaryCrossover(Operation):
                 result.extend(cross_pair(a, b, self.cross_num))
             else:
                 result.extend((a, b))
+
+        LOGGER.debug("Finished main crossover")
         if remaining is not None:
+            LOGGER.debug("Appending remaining element")
             result.append(remaining)
         return result

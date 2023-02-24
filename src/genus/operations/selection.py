@@ -45,6 +45,7 @@ class ElitismSelection(Operation):
         self.proportion = proportion
 
     def forward(self, x: List[Chromosome]) -> List[Chromosome]:
+        LOGGER.debug("Doing forward pass of ElitismSelection")
         values = sorted(x, key=self.fitness, reverse=True)
         if self.amount is not None:
             return values[:self.amount]
