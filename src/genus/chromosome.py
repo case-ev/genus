@@ -4,11 +4,19 @@ genus.chromosome
 Code for the creation of chromosomes, which act as the basic data structure.
 """
 
-from typing import Self
+from typing import List, Self
 
 import numpy as np
 
 from genus_utils.logger import LOGGER
+
+
+def __chromosome_init_zero(size, **_):
+    return "0" * size
+
+
+def __chromosome_init_random_binary(size, p=0.5, **_):
+    return "".join((Chromosome.RNG.random(size) <= p).astype(int).astype(str))
 
 
 class Chromosome:
@@ -100,16 +108,32 @@ criterion={repr(self.criterion)})"
         """
         return concatenate(self, *chromosomes, **kwargs)
 
+    def split(self, idx: List[int]) -> List[Self]:
+        """Split this chromosome in the indicated indices.
 
-def __chromosome_init_zero(size, **_):
-    return "0" * size
+        The indices can either be a single index, indicating one split,
+        or a list of indices, indicating multiple cuts.
+
+        Parameters
+        ----------
+        idx : int or List[int]
+            Indices on which to make the cut to the chromosome. If a single
+            index is given, the cut is made on that index.
+
+        Returns
+        -------
+        List[Chromosome]
+            Cut up chromosome.
+        """
+        return split(self, idx)
 
 
-def __chromosome_init_random_binary(size, p=0.5, **_):
-    return "".join((Chromosome.RNG.random(size) <= p).astype(int).astype(str))
+###############################################################################
+# |==========================| Basic operations |===========================| #
+###############################################################################
 
 
-def concatenate(*chromosomes, reverse=False) -> Chromosome:
+def concatenate(*chromosomes: Chromosome, reverse: bool = False) -> Chromosome:
     """Concatenate multiple chromosomes end-to-end.
 
     The concatenation is done following the order in which chromosomes
@@ -131,3 +155,32 @@ def concatenate(*chromosomes, reverse=False) -> Chromosome:
     for c in chromosomes:
         code = f"{c.code}{code}" if reverse else f"{code}{c.code}"
     return Chromosome(code=code, criterion=chromosomes[0].criterion)
+
+
+def split(c: Chromosome, idx: List[int]) -> List[Chromosome]:
+    """Split a chromosome in the indicated indices.
+
+    The indices can either be a single index, indicating one split,
+    or a list of indices, indicating multiple cuts.
+
+    Parameters
+    ----------
+    c : Chromosome
+        Chromosome to split.
+    idx : int or List[int]
+        Indices on which to make the cut to the chromosome. If a single
+        index is given, the cut is made on that index.
+
+    Returns
+    -------
+    List[Chromosome]
+        Cut up chromosome.
+    """
+    try:
+        result = [Chromosome(code=c[:idx[0]])]
+        result.extend([Chromosome(code=c[p:idx[i + 1]]) for i, p in enumerate(idx[:-1])])
+        result.append(Chromosome(code=c[idx[-1]:]))
+    except TypeError:
+        # Raised when there is a single place
+        result = [Chromosome(code=c[:idx]), Chromosome(code=c[idx:])]
+    return result
