@@ -1,7 +1,7 @@
 """
-genus.operations.sequential
+genus.operations.meta_operations
 ---------------------------
-Sequential application of operations on chromosomes.
+Operations that use other operations as a base.
 """
 
 from typing import Iterator
@@ -21,4 +21,11 @@ class Sequential(Operation):
     def forward(self, x: object) -> object:
         for op in self:
             x = op(x)
+        return x
+
+
+class Identity(Operation):
+    """Operation that does nothing"""
+
+    def forward(self, x: object) -> object:
         return x
