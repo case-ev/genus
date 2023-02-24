@@ -58,20 +58,35 @@ def cross_pair(
 class Crossover(Operation):
     """Crossover operation"""
 
-    def __init__(self, size=None, cross_num=1) -> None:
+    def __init__(self, size=None, cross_num=1, cross_probability=1) -> None:
         super().__init__()
         self.size = size
         self.cross_num = cross_num
+        self.cross_probability = cross_probability
 
     def forward(self, x: List[Chromosome]) -> List[Chromosome]:
+        rng = np.random.default_rng()
+
         size = self.size
         remaining = None
         if size is None:
-            if l := len(x) % 2 == 1:
+            if (l := len(x)) % 2 == 1:
                 # We remove the odd element
                 remaining = x.pop()
             size = l // 2
 
-        np.random.default_rng().shuffle(x)
-        group1 = x[::2]
-        group2 = x[1::2]
+        # Choose the first `size` elements
+        rng.shuffle(x)
+        group1 = x[:size + 2:2]
+        group2 = x[1:size + 3:2]
+        result = x[2 * size:]       # Puts the remaining ones in `result`
+
+        # Apply the crossover
+        for a, b in zip(group1, group2):
+            if rng.random() <= self.cross_probability:
+                result.extend(cross_pair(a, b, self.cross_num))
+            else:
+                result.extend((a, b))
+        if remaining is not None:
+            result.append(remaining)
+        return result
