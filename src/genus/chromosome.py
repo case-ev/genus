@@ -143,9 +143,11 @@ def split(c: Chromosome, idx: List[int]) -> List[Chromosome]:
         Cut up chromosome.
     """
     try:
-        result = [Chromosome(code=c.code[:idx[0]])]
-        result.extend([Chromosome(code=c.code[p:idx[i + 1]]) for i, p in enumerate(idx[:-1])])
-        result.append(Chromosome(code=c.code[idx[-1]:]))
+        result = [Chromosome(code=c.code[: idx[0]])]
+        result.extend(
+            [Chromosome(code=c.code[p : idx[i + 1]]) for i, p in enumerate(idx[:-1])]
+        )
+        result.append(Chromosome(code=c.code[idx[-1] :]))
     except TypeError:
         # Raised when there is a single place
         result = [Chromosome(code=c.code[:idx]), Chromosome(code=c.code[idx:])]

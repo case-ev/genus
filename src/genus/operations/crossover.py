@@ -70,7 +70,13 @@ def _probfn_normalize(pop):
 class BinaryCrossover(Operation):
     """Binary crossover operation, whick uses two parents"""
 
-    def __init__(self, size=None, cross_num=1, cross_probability=1, probability_function: Callable[[Population], float] = _probfn_normalize) -> None:
+    def __init__(
+        self,
+        size=None,
+        cross_num=1,
+        cross_probability=1,
+        probability_function: Callable[[Population], float] = _probfn_normalize,
+    ) -> None:
         super().__init__()
         self.size = size
         self.cross_num = cross_num

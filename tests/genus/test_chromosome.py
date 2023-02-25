@@ -74,7 +74,9 @@ def test_concatenation():
     assert str(concatenate(c1, c2, c3, empty_c1)) == "000011110101"
     assert str(concatenate(c1, c2, c3, empty_c1, reverse=True)) == "010111110000"
     assert concatenate(c1, c2, c3, empty_c1) == c1.concatenate(c2, c3, empty_c1)
-    assert concatenate(c1, c2, c3, empty_c1, reverse=True) == empty_c1.concatenate(c3, c2, c1)
+    assert concatenate(c1, c2, c3, empty_c1, reverse=True) == empty_c1.concatenate(
+        c3, c2, c1
+    )
 
 
 def test_split():

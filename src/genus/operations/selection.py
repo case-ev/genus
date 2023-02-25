@@ -44,9 +44,11 @@ class ElitismSelection(Operation):
         LOGGER.debug("Doing forward pass of ElitismSelection")
         values = sorted(x.members, key=x.fitness, reverse=True)
         if self.amount is not None:
-            return Population(values[:self.amount], x.fitness)
+            return Population(values[: self.amount], x.fitness)
         if self.proportion is not None:
             size = int(len(values) * self.proportion)
             return Population(values[:size], x.fitness)
-        LOGGER.warning("Neither amount or proportion were specified, returning all values")
+        LOGGER.warning(
+            "Neither amount or proportion were specified, returning all values"
+        )
         return Population(values, x.fitness)

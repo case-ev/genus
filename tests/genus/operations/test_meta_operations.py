@@ -8,7 +8,7 @@ def test_sequential():
 
     # This is an unintended use case, but it still should be supported
     op = Sequential(
-        lambda x: x ** 2,
+        lambda x: x**2,
         lambda x: 2 * x,
         Identity(),
     )

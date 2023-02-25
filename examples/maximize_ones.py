@@ -40,7 +40,11 @@ def main(
 
     LOGGER.info("Creating population")
     population = genus.Population.from_num(
-        members, chrom_size, _fitness, criterion=criterion, criterion_kwargs={"p": one_prob}
+        members,
+        chrom_size,
+        _fitness,
+        criterion=criterion,
+        criterion_kwargs={"p": one_prob},
     )
     pipeline = genus.Sequential(
         genus.Parallel(
