@@ -5,11 +5,8 @@ Code for the selection operator, which takes a population of chromosomes
 and determines which ones are chosen to reproduce.
 """
 
-from typing import Callable, List
-
 from genus_utils.logger import LOGGER
 
-from genus.chromosome import Chromosome
 from genus.population import Population
 from genus.operations.operation import Operation
 
@@ -41,7 +38,6 @@ class ElitismSelection(Operation):
         self.proportion = proportion
 
     def forward(self, x: Population) -> Population:
-        LOGGER.debug("Doing forward pass of ElitismSelection")
         values = sorted(x.members, key=x.fitness, reverse=True)
         if self.amount is not None:
             return Population(values[: self.amount], x.fitness)

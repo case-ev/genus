@@ -8,8 +8,6 @@ from typing import List, Self, Iterator
 
 import numpy as np
 
-from genus_utils.logger import LOGGER
-
 
 def __chromosome_init_zero(size, **_):
     return "0" * size
@@ -116,7 +114,6 @@ def concatenate(*chromosomes: Chromosome, reverse: bool = False) -> Chromosome:
     Chromosome
         Concatenated chromosome.
     """
-    LOGGER.debug("Concatenating %i chromosomes", len(chromosomes))
     code = ""
     for c in chromosomes:
         code = f"{c.code}{code}" if reverse else f"{code}{c.code}"

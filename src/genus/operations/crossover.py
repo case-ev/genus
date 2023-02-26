@@ -84,10 +84,6 @@ class BinaryCrossover(Operation):
         self._prob_fn = probability_function
 
     def forward(self, x: Population) -> Population:
-        LOGGER.debug(
-            "Applying crossover operation with probability %.2f%%",
-            100 * self.cross_probability,
-        )
         rng = np.random.default_rng()
         probabilities = self._prob_fn(x)
 

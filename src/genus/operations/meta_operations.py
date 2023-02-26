@@ -7,8 +7,6 @@ Operations that use other operations as a base.
 from typing import Callable, Iterator, List
 import concurrent.futures
 
-from genus_utils.logger import LOGGER
-
 from genus.operations.operation import Operation
 
 
@@ -30,7 +28,6 @@ class Sequential(Operation):
         return iter(self.operations)
 
     def forward(self, x: object) -> object:
-        LOGGER.debug("Applying Sequential operations")
         for op in self:
             if self._update_function is not None:
                 self._update_function(x, op)
