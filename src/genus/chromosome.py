@@ -124,9 +124,8 @@ def concatenate(*chromosomes: Chromosome, reverse: bool = False) -> Chromosome:
     Chromosome
         Concatenated chromosome.
     """
-    code = np.array([], dtype=np.uint8)
-    for c in chromosomes:
-        code = np.concatenate((c.code, code)) if reverse else np.concatenate((code, c.code))
+    _chroms = chromosomes[::-1] if reverse else chromosomes
+    code = np.concatenate([c.code for c in _chroms])
     return Chromosome(code)
 
 
