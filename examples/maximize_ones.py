@@ -78,6 +78,7 @@ def main(
         genus.Parallel(
             genus.ElitismSelection(elitism_size),
             genus.TwoParentCrossover(members - elitism_size, cross_num, cross_prob),
+            _update_function=_diagnostic.add_time,
         ),
         genus.Join(),
         genus.BinaryMutation(mut_prob),
@@ -98,4 +99,4 @@ def main(
         print("\nDiagnostic")
         print("==========")
         for op, times in _diagnostic.dict.items():
-            print(f"+ {op:15} -> {1000 * sum(times):12.4f}ms")
+            print(f"+ {op:20} -> {1000 * sum(times):12.4f}ms")
