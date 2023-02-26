@@ -59,6 +59,7 @@ def main(
     generations=200,
     criterion="random_binary",
     diagnostic=False,
+    display=False,
 ):
     """Maximize the number of ones in a string"""
     LOGGER.info("Parsing input arguments")
@@ -94,12 +95,22 @@ def main(
     for _ in (prog_bar := tqdm(range(generations), desc="Optimizing")):
         try:
             population = pipeline(population)
-            prog_bar.desc = f"Optimizing, current best is {population.max_member()}"
+            best = population.max_member()
+            ratio = _fitness(best) / len(best)
+            if display:
+                prog_bar.desc = f"Optimizing, current best is {100 * ratio:6.2f} {best}%"
+            else:
+                prog_bar.desc = f"Optimizing, current best {100 * ratio:6.2f}%"
         except BaseException as e:
             LOGGER.error("Found error %s, safely ending training", e)
             break
 
-    print(f"Best chromosome: {population.max_member()}")
+    best = population.max_member()
+    ratio = _fitness(best) / len(best)
+    if display:
+        print(f"Best chromosome {100 * ratio:6.2f} {best}%")
+    else:
+        print(f"Best chromosome {100 * ratio:6.2f}%")
 
     if diagnostic:
         print("\nDiagnostic")
@@ -130,7 +141,7 @@ def main(
 
                 print(
                     f"+ {op:20} -> Total {1000 * sum(times):12.4f}ms | Per generation \
-{1000 * moving_avg:8.4f}\u00b1{1000 * np.sqrt(moving_var):.4f}ms"
+{1000 * moving_avg:8.4f} \u00b1 {1000 * np.sqrt(moving_var):.4f}ms"
                 )
                 ax.scatter(x, times, label="raw", alpha=0.5)
                 ax.plot(x, result_avg, label="\u03bc")
