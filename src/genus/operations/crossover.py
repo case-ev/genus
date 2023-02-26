@@ -67,8 +67,8 @@ def _probfn_normalize(pop):
     return values
 
 
-class BinaryCrossover(Operation):
-    """Binary crossover operation, whick uses two parents"""
+class TwoParentCrossover(Operation):
+    """Crossover operation which uses two parents"""
 
     def __init__(
         self,

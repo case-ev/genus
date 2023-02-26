@@ -49,7 +49,7 @@ def main(
     pipeline = genus.Sequential(
         genus.Parallel(
             genus.ElitismSelection(elitism_size),
-            genus.BinaryCrossover(members - elitism_size, cross_num, cross_prob),
+            genus.TwoParentCrossover(members - elitism_size, cross_num, cross_prob),
         ),
         genus.Join(),
         genus.Mutation(mut_prob),
