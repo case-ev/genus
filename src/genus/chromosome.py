@@ -95,6 +95,11 @@ class Chromosome:
         """
         return split(self, idx)
 
+    def flip_bit(self, idx):
+        """Flip the bit at a given position"""
+        self.code[idx] = not self.code[idx]
+        return self.code
+
 
 ###############################################################################
 # |==========================| Basic operations |===========================| #

@@ -12,11 +12,6 @@ from genus.chromosome import Chromosome
 from genus.operations.operation import Operation
 
 
-def _flip_bit(code, idx):
-    code[idx] = not code[idx]
-    return code
-
-
 class BinaryMutation(Operation):
     """Mutation operation, which randomly flips bits"""
 
@@ -28,5 +23,5 @@ class BinaryMutation(Operation):
         for c in x:
             for i, _ in enumerate(c):
                 if np.random.default_rng().random() <= self.prob:
-                    c.code = _flip_bit(c.code, i)
+                    c.flip_bit(i)
         return x
