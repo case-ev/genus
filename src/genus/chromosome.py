@@ -100,6 +100,11 @@ class Chromosome:
         self.code[idx] = not self.code[idx]
         return self.code
 
+    def flip_bits(self, indicators):
+        """Flip the bits where `indicators` is 1"""
+        self.code = (self.code + indicators) % 2
+        return self.code
+
 
 ###############################################################################
 # |==========================| Basic operations |===========================| #
