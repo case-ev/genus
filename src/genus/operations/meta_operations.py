@@ -16,7 +16,7 @@ class Sequential(Operation):
     def __init__(
         self,
         *operations: Operation,
-        _update_function: Callable[[object, Operation], None] = None
+        _update_function: Callable[[object, Operation], object] = lambda x, op: op(x),
     ) -> None:
         super().__init__()
         self.operations = operations
@@ -29,11 +29,7 @@ class Sequential(Operation):
 
     def forward(self, x: object) -> object:
         for op in self:
-            if self._update_function is not None:
-                self._update_function(x, op)
-            x = op(x)
-        if self._update_function is not None:
-            self._update_function(x, None)
+            x = self._update_function(x, op)
         return x
 
 
