@@ -86,19 +86,22 @@ class TwoParentCrossover(Operation):
     def forward(self, x: Population) -> Population:
         rng = np.random.default_rng()
         probabilities = self._prob_fn(x)
+        half_size = self.size // 2
 
         # If self mating occurs it would mean that the parent has an amazing fitness
         parents = rng.choice(x, self.size, p=probabilities)
-        children = []
+        children = np.empty(self.size, dtype=Chromosome)
         p1 = parents[::2]
         p2 = parents[1::2]
-        for a, b in zip(p1, p2):
-            if rng.random() <= self.cross_probability:
-                children.extend(cross_pair(a, b, self.cross_num))
+        binary = [0, 1]
+        rand = rng.choice(binary, half_size)
+        for i, (a, b) in enumerate(zip(p1, p2)):
+            if rand[i]:
+                children[[i, half_size + i]] = cross_pair(a, b, self.cross_num)
             else:
-                children.extend((a, b))
+                children[[i, half_size + i]] = a, b
 
         if (l := len(children)) != self.size:
             LOGGER.error("Size of children and origin do not match")
             raise UnmatchingSizesException(l, self.size)
-        return Population(children, x.fitness)
+        return Population(children.tolist(), x.fitness)
