@@ -61,6 +61,12 @@ class Population:
             **kwargs,
         )
 
+    def __eq__(self, o: object) -> bool:
+        try:
+            return o.members == self.members and o.fitness == self.fitness
+        except AttributeError:
+            return False
+
     def __getitem__(self, key: object) -> Chromosome:
         return self.members[key]
 
