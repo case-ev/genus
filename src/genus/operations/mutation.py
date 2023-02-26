@@ -21,7 +21,8 @@ class BinaryMutation(Operation):
 
     def forward(self, x: Iterator[Chromosome]) -> Iterator[Chromosome]:
         for c in x:
+            rand = np.random.default_rng().random(len(c))
             for i, _ in enumerate(c):
-                if np.random.default_rng().random() <= self.prob:
+                if rand[i] <= self.prob:
                     c.flip_bit(i)
         return x
