@@ -5,6 +5,7 @@ Operations that use other operations as a base.
 """
 
 from typing import Callable, Iterator, List
+import concurrent.futures
 
 from genus_utils.logger import LOGGER
 
@@ -47,4 +48,7 @@ class Parallel(Operation):
         self.operations = operations
 
     def forward(self, x: object) -> List:
-        return [op(x) for op in self.operations]
+        # Use multithreading to speed up the execution
+        with concurrent.futures.ThreadPoolExecutor() as executor:
+            futures = [executor.submit(op, x) for op in self.operations]
+            return [f.result() for f in futures]
