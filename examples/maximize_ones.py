@@ -5,11 +5,17 @@ Example to show a program that maximizes the number of ones in a string
 using genetic algorithms.
 """
 
-from tqdm import tqdm
 from timeit import default_timer as timer
+
+from tqdm import tqdm
+import matplotlib.pyplot as plt
+import numpy as np
 
 from genus_utils.logger import LOGGER
 import genus
+
+
+plt.style.use("tableau-colorblind10")
 
 
 # Counts the number of ones
@@ -99,4 +105,36 @@ def main(
         print("\nDiagnostic")
         print("==========")
         for op, times in _diagnostic.dict.items():
-            print(f"+ {op:20} -> {1000 * sum(times):12.4f}ms")
+            if op not in ["Parallel", "Join"]:
+                fig, ax = plt.subplots()
+                fig.suptitle(op)
+                ax.set_xlabel("Generations")
+                ax.set_ylabel("Time")
+
+                x = np.arange(len(times))
+                result_avg = []
+                result_var = []
+                std_p = []
+                std_m = []
+                moving_avg = 0
+                moving_var = 0
+                for i, t in enumerate(times):
+                    moving_avg = t / (i + 1) + i / (i + 1) * moving_avg
+                    moving_var = (t - moving_avg) ** 2 / (i + 1) + i / (
+                        i + 1
+                    ) * moving_var
+                    result_avg.append(moving_avg)
+                    result_var.append(moving_var)
+                    std_p.append(moving_avg + np.sqrt(moving_var))
+                    std_m.append(moving_avg - np.sqrt(moving_var))
+
+                print(
+                    f"+ {op:20} -> Total {1000 * sum(times):12.4f}ms | Per iteration \
+{1000 * moving_avg:8.4f}\u00b1{1000 * moving_var:.4f}ms"
+                )
+                ax.scatter(x, times, label="raw", alpha=0.5)
+                ax.plot(x, result_avg, label="\u03bc")
+                ax.fill_between(x, std_m, std_p, alpha=0.25, color="#555", label="\u03c3")
+            ax.legend()
+
+        plt.show()
