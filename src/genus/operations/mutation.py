@@ -21,7 +21,7 @@ def _flip_bit(code, idx):
     return f"{code[:idx]}{bit}{code[idx + 1:]}"
 
 
-class Mutation(Operation):
+class BinaryMutation(Operation):
     """Mutation operation, which randomly flips bits"""
 
     def __init__(self, mutation_probability=0.001) -> None:

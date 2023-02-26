@@ -52,7 +52,7 @@ def main(
             genus.TwoParentCrossover(members - elitism_size, cross_num, cross_prob),
         ),
         genus.Join(),
-        genus.Mutation(mut_prob),
+        genus.BinaryMutation(mut_prob),
     )
 
     for _ in (prog_bar := tqdm(range(generations), desc="Optimizing")):
