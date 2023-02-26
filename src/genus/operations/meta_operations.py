@@ -48,7 +48,6 @@ class Parallel(Operation):
     def forward(self, x: object) -> List:
         # Use multithreading to speed up the execution
         with concurrent.futures.ThreadPoolExecutor() as executor:
-            # futures = [executor.submit(op, x) for op in self.operations]
             futures = [
                 executor.submit(self._update_function, x, op) for op in self.operations
             ]
