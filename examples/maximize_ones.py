@@ -89,8 +89,8 @@ def main(
         try:
             population = pipeline(population)
             prog_bar.desc = f"Optimizing, current best is {population.max_member()}"
-        except:
-            LOGGER.error("Found error, safely ending training")
+        except BaseException as e:
+            LOGGER.error("Found error %s, safely ending training", e)
             break
 
     print(f"Best chromosome: {population.max_member()}")
