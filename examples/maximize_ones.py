@@ -129,7 +129,7 @@ def main(
                     std_m.append(moving_avg - np.sqrt(moving_var))
 
                 print(
-                    f"+ {op:20} -> Total {1000 * sum(times):12.4f}ms | Per iteration \
+                    f"+ {op:20} -> Total {1000 * sum(times):12.4f}ms | Per generation \
 {1000 * moving_avg:8.4f}\u00b1{1000 * moving_var:.4f}ms"
                 )
                 ax.scatter(x, times, label="raw", alpha=0.5)
