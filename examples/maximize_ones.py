@@ -13,7 +13,7 @@ import genus
 
 # Counts the number of ones
 def _fitness(c: genus.Chromosome) -> float:
-    return c.code.count("1")
+    return (c.code == 1).sum()
 
 
 def main(

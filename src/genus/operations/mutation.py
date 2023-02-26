@@ -13,12 +13,8 @@ from genus.operations.operation import Operation
 
 
 def _flip_bit(code, idx):
-    bit = code[idx]
-    if bit == "1":
-        bit = "0"
-    else:
-        bit = "1"
-    return f"{code[:idx]}{bit}{code[idx + 1:]}"
+    code[idx] = not code[idx]
+    return code
 
 
 class BinaryMutation(Operation):

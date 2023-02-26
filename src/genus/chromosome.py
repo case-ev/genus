@@ -10,19 +10,24 @@ import numpy as np
 
 
 def __chromosome_init_zero(size, **_):
-    return "0" * size
+    return np.zeros(size, dtype=np.uint8)
 
 
 def __chromosome_init_random_binary(size, p=0.5, **_):
-    return "".join((np.random.default_rng().random(size) <= p).astype(int).astype(str))
+    return (np.random.default_rng().random(size) <= p).astype(np.uint8)
 
 
 class Chromosome:
     """Chromosome containing some genetic code for an organism"""
 
-    def __init__(self, code: str) -> None:
+    def __init__(self, code: np.ndarray) -> None:
         self.code = code
         self._size = len(code)
+
+    @property
+    def code_str(self):
+        """Code as string"""
+        return "".join(map(str, self.code))
 
     @classmethod
     def from_size(cls, size: int, criterion: str = "random_binary", **kwargs) -> Self:
@@ -41,7 +46,7 @@ class Chromosome:
         return f"Chromosome(code={repr(self.code)})"
 
     def __str__(self) -> str:
-        return self.code
+        return self.code_str
 
     def __iter__(self) -> Iterator[str]:
         return iter(self.code)
@@ -114,9 +119,9 @@ def concatenate(*chromosomes: Chromosome, reverse: bool = False) -> Chromosome:
     Chromosome
         Concatenated chromosome.
     """
-    code = ""
+    code = np.array([], dtype=np.uint8)
     for c in chromosomes:
-        code = f"{c.code}{code}" if reverse else f"{code}{c.code}"
+        code = np.concatenate((c.code, code)) if reverse else np.concatenate((code, c.code))
     return Chromosome(code)
 
 
