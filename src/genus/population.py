@@ -9,9 +9,10 @@ from typing import Callable, Dict, Iterator, List, Self
 import numpy as np
 
 from genus.chromosome import Chromosome
+from genus.types import Concatenable
 
 
-class Population:
+class Population(Concatenable):
     """Population of chromosomes"""
 
     def __init__(
@@ -107,14 +108,14 @@ class Population:
         """Get the standard deviation of fitness"""
         return np.std(self.member_fitness())
 
-    def join(self, *populations, fitness: Callable[[Chromosome], float] = None) -> Self:
-        """Join this population to a series of other populations. If
+    def concatenate(self, *populations, fitness: Callable[[Chromosome], float] = None, **_) -> Self:
+        """Concatenate this population to a series of other populations. If
         no fitness function is given, it takes the one from this population.
 
         Parameters
         ----------
         *populations: Population
-            Populations to join.
+            Populations to concatenate.
         fitness: Callable[[Chromosome], float], optional
             Fitness function to use, by default None. If None, it uses the
             fitness function of this population.
@@ -124,38 +125,7 @@ class Population:
         Population
             Joint population.
         """
-        return join(
-            self,
-            *populations,
-            fitness=self.fitness if fitness is None else fitness,
-        )
-
-
-###############################################################################
-# |==========================| Basic operations |===========================| #
-###############################################################################
-
-
-def join(
-    *populations: Population, fitness: Callable[[Chromosome], float] = None
-) -> Population:
-    """Join a series of populations. If no fitness function is given,
-    it takes the one from the first population.
-
-    Parameters
-    ----------
-    *populations: Population
-        Populations to join.
-    fitness: Callable[[Chromosome], float], optional
-        Fitness function to use, by default None. If None, it uses the
-        fitness function of the first population.
-
-    Returns
-    -------
-    Population
-        Joint population.
-    """
-    members = []
-    for p in populations:
-        members.extend(p.members)
-    return Population(members, populations[0].fitness if fitness is None else fitness)
+        members = self.members.copy()
+        for p in populations:
+            members.extend(p.members)
+        return Population(members, self.fitness if fitness is None else fitness)

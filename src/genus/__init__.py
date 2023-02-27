@@ -8,3 +8,4 @@ using genetic algorithms.
 from .operations import *
 from .chromosome import *
 from .population import *
+from .types import *

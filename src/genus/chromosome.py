@@ -8,6 +8,8 @@ from typing import List, Self, Iterator
 
 import numpy as np
 
+from genus.types import Concatenable
+
 
 def __chromosome_init_zero(size, **_):
     return np.zeros(size, dtype=np.uint8)
@@ -17,7 +19,7 @@ def __chromosome_init_random_binary(size, p=0.5, **_):
     return (np.random.default_rng().random(size) <= p).astype(np.uint8)
 
 
-class Chromosome:
+class Chromosome(Concatenable):
     """Chromosome containing some genetic code for an organism"""
 
     def __init__(self, code: np.ndarray) -> None:
@@ -56,8 +58,8 @@ class Chromosome:
         """Size of the chromosome"""
         return self._size
 
-    def concatenate(self, *chromosomes, **kwargs) -> Self:
-        """Concatenate multiple chromosomes end-to-end to this one.
+    def concatenate(self, *chromosomes: Self, reverse=False, **_) -> Self:
+        """Concatenate multiple chromosomes end-to-end.
 
         The concatenation is done following the order in which chromosomes
         are given to the function.
@@ -74,7 +76,9 @@ class Chromosome:
         Chromosome
             Concatenated chromosome.
         """
-        return concatenate(self, *chromosomes, **kwargs)
+        _chroms = [*chromosomes[::-1], self] if reverse else [self, *chromosomes]
+        code = np.concatenate([c.code for c in _chroms])
+        return Chromosome(code)
 
     def split(self, idx: List[int]) -> List[Self]:
         """Split this chromosome in the indicated indices.
@@ -93,7 +97,16 @@ class Chromosome:
         List[Chromosome]
             Cut up chromosome.
         """
-        return split(self, idx)
+        try:
+            result = [Chromosome(code=self.code[: idx[0]])]
+            result.extend(
+                [Chromosome(code=self.code[p : idx[i + 1]]) for i, p in enumerate(idx[:-1])]
+            )
+            result.append(Chromosome(code=self.code[idx[-1] :]))
+        except TypeError:
+            # Raised when there is a single place
+            result = [Chromosome(code=self.code[:idx]), Chromosome(code=self.code[idx:])]
+        return result
 
     def flip_bit(self, idx):
         """Flip the bit at a given position"""
@@ -104,62 +117,3 @@ class Chromosome:
         """Flip the bits where `indicators` is 1"""
         self.code = (self.code + indicators) % 2
         return self.code
-
-
-###############################################################################
-# |==========================| Basic operations |===========================| #
-###############################################################################
-
-
-def concatenate(*chromosomes: Chromosome, reverse: bool = False) -> Chromosome:
-    """Concatenate multiple chromosomes end-to-end.
-
-    The concatenation is done following the order in which chromosomes
-    are given to the function.
-
-    Parameters
-    ----------
-    *chromosomes: Chromosome
-        Chromosomes to join.
-    reverse: bool, optional
-        Whether to concatenate in reverse, by default False.
-
-    Returns
-    -------
-    Chromosome
-        Concatenated chromosome.
-    """
-    _chroms = chromosomes[::-1] if reverse else chromosomes
-    code = np.concatenate([c.code for c in _chroms])
-    return Chromosome(code)
-
-
-def split(c: Chromosome, idx: List[int]) -> List[Chromosome]:
-    """Split a chromosome in the indicated indices.
-
-    The indices can either be a single index, indicating one split,
-    or a list of indices, indicating multiple cuts.
-
-    Parameters
-    ----------
-    c : Chromosome
-        Chromosome to split.
-    idx : int or List[int]
-        Indices on which to make the cut to the chromosome. If a single
-        index is given, the cut is made on that index.
-
-    Returns
-    -------
-    List[Chromosome]
-        Cut up chromosome.
-    """
-    try:
-        result = [Chromosome(code=c.code[: idx[0]])]
-        result.extend(
-            [Chromosome(code=c.code[p : idx[i + 1]]) for i, p in enumerate(idx[:-1])]
-        )
-        result.append(Chromosome(code=c.code[idx[-1] :]))
-    except TypeError:
-        # Raised when there is a single place
-        result = [Chromosome(code=c.code[:idx]), Chromosome(code=c.code[idx:])]
-    return result

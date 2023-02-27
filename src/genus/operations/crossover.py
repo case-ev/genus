@@ -12,8 +12,9 @@ import numpy as np
 from genus_utils.logger import LOGGER
 
 from genus.exceptions import UnmatchingSizesException
-from genus.chromosome import Chromosome, concatenate
+from genus.chromosome import Chromosome
 from genus.population import Population
+from genus.types import concatenate
 from genus.operations.operation import Operation
 
 
