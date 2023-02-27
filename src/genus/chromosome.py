@@ -23,7 +23,7 @@ class Chromosome(Concatenable):
     """Chromosome containing some genetic code for an organism"""
 
     def __init__(self, code: np.ndarray) -> None:
-        self.code = code
+        self.code = np.array(code, dtype=np.uint8)
         self._size = len(code)
 
     @property
@@ -32,13 +32,18 @@ class Chromosome(Concatenable):
         return "".join(map(str, self.code))
 
     @classmethod
+    def from_str(cls, binary_str: str, *args, **kwargs) -> Self:
+        """Create a chromosome from a string"""
+        return cls(np.array(list(map(int, binary_str)), dtype=np.uint8), *args, **kwargs)
+
+    @classmethod
     def from_size(cls, size: int, criterion: str = "random_binary", **kwargs) -> Self:
         """Create a chromosome from a size and a criterion"""
         return cls(globals()[f"__chromosome_init_{criterion}"](size, **kwargs))
 
     def __eq__(self, obj: object) -> bool:
         if isinstance(obj, type(self)):
-            return self.code == obj.code
+            return (self.code == obj.code).all()
         return False
 
     def __len__(self) -> int:
@@ -52,6 +57,10 @@ class Chromosome(Concatenable):
 
     def __iter__(self) -> Iterator[str]:
         return iter(self.code)
+
+    def string(self) -> str:
+        """Get the string of this item"""
+        return str(self)
 
     @property
     def size(self) -> int:
