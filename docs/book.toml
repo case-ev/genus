@@ -1,5 +1,5 @@
 [book]
-authors = ["CASE"]
+authors = ["CASE", "Cristóbal Allendes"]
 language = "en"
 multilingual = false
 src = "."
@@ -7,6 +7,7 @@ title = "Genus"
 
 [build]
 build-dir = "../book"
+use-default-preprocessors = true
 
 [output.html]
 mathjax-support = true
