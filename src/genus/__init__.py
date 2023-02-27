@@ -6,6 +6,6 @@ using genetic algorithms.
 """
 
 from .operations import *
-from .chromosome import *
-from .population import *
-from .types import *
+from .chromosome import Chromosome
+from .population import Population
+from .types import Concatenable, concatenate
