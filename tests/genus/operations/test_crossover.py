@@ -5,8 +5,8 @@ import genus
 
 def test_binary():
     """Test binary crossover"""
-    c1 = genus.Chromosome("000000000000")
-    c2 = genus.Chromosome("111111111111")
+    c1 = genus.Chromosome.from_str("000000000000")
+    c2 = genus.Chromosome.from_str("111111111111")
 
     cross1, cross2 = genus.cross_pair(c1, c2, None, _cross_points=(4, 8, 10))
     assert str(cross1) == "000011110011"
