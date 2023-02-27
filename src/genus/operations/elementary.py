@@ -7,8 +7,7 @@ Elementary operations between Populations.
 from typing import Iterator
 
 from genus.operations.operation import Operation
-from genus.population import Population
-from genus.types import concatenate
+from genus.types import concatenate, Concatenable
 
 
 class Identity(Operation):
@@ -21,5 +20,5 @@ class Identity(Operation):
 class Join(Operation):
     """Join multiple populations"""
 
-    def forward(self, x: Iterator[Population]) -> Population:
+    def forward(self, x: Iterator[Concatenable]) -> Concatenable:
         return concatenate(*x)
