@@ -26,11 +26,6 @@ class Chromosome(Concatenable):
         self.code = np.array(code, dtype=np.uint8)
         self._size = len(code)
 
-    @property
-    def code_str(self):
-        """Code as string"""
-        return "".join(map(str, self.code))
-
     @classmethod
     def from_str(cls, binary_str: str, *args, **kwargs) -> Self:
         """Create a chromosome from a string"""
@@ -52,14 +47,21 @@ class Chromosome(Concatenable):
     def __repr__(self) -> str:
         return f"Chromosome(code={repr(self.code)})"
 
-    def __str__(self) -> str:
-        return self.code_str
-
     def __iter__(self) -> Iterator[str]:
         return iter(self.code)
 
-    def string(self) -> str:
-        """Get the string of this item"""
+    def __int__(self) -> int:
+        return int(self.to_str(), 2)
+
+    def __str__(self) -> str:
+        return "".join(map(str, self.code))
+
+    def to_int(self) -> int:
+        """Convert the code to integer"""
+        return int(self)
+
+    def to_str(self):
+        """Convert the code to str"""
         return str(self)
 
     @property
