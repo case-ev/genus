@@ -81,14 +81,14 @@ def main(
         criterion_kwargs={"p": one_prob},
     )
     _diagnostic = _Diagnostic()
-    pipeline = genus.Sequential(
-        genus.Parallel(
-            genus.ElitismSelection(elitism_size),
-            genus.TwoParentCrossover(members - elitism_size, cross_num, cross_prob),
+    pipeline = genus.ops.Sequential(
+        genus.ops.Parallel(
+            genus.ops.ElitismSelection(elitism_size),
+            genus.ops.TwoParentCrossover(members - elitism_size, cross_num, cross_prob),
             _update_function=_diagnostic.add_time,
         ),
-        genus.Join(),
-        genus.BinaryMutation(mut_prob),
+        genus.ops.Join(),
+        genus.ops.BinaryMutation(mut_prob),
         _update_function=_diagnostic.add_time,
     )
 

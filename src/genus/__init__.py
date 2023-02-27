@@ -5,7 +5,16 @@ genus
 using genetic algorithms.
 """
 
-from .operations import *
+from . import ops
 from .chromosome import Chromosome
 from .population import Population
 from .types import Concatenable, concatenate
+
+
+__all__ = [
+    "ops",
+    "Chromosome",
+    "Population",
+    "Concatenable",
+    "concatenate",
+]
