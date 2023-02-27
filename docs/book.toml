@@ -2,7 +2,7 @@
 authors = ["CASE"]
 language = "en"
 multilingual = false
-src = "src"
+src = "."
 title = "Genus"
 
 [build]
