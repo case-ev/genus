@@ -1,5 +1,5 @@
 """
-genus.operations.crossover
+genus.ops.crossover
 --------------------------
 Code for the crossover operation, which takes two chromosomes, splits
 them and joins them.
@@ -15,7 +15,7 @@ from genus.exceptions import UnmatchingSizesException
 from genus.chromosome import Chromosome
 from genus.population import Population
 from genus.types import concatenate
-from genus.operations.operation import Operation
+from genus.ops.operation import Operation
 
 
 def cross_pair(

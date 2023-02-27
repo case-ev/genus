@@ -1,5 +1,5 @@
 """
-genus.operations.selection
+genus.ops.selection
 --------------------------
 Code for the selection operator, which takes a population of chromosomes
 and determines which ones are chosen to reproduce.
@@ -8,7 +8,7 @@ and determines which ones are chosen to reproduce.
 from genus_utils.logger import LOGGER
 
 from genus.population import Population
-from genus.operations.operation import Operation
+from genus.ops.operation import Operation
 
 
 class ElitismSelection(Operation):

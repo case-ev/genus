@@ -1,5 +1,5 @@
 """
-genus.operations.meta_operations
+genus.ops.meta_operations
 ---------------------------
 Operations that use other operations as a base.
 """
@@ -7,7 +7,7 @@ Operations that use other operations as a base.
 from typing import Callable, Iterator, List
 import concurrent.futures
 
-from genus.operations.operation import Operation
+from genus.ops.operation import Operation
 
 
 class Sequential(Operation):

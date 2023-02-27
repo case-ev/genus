@@ -1,5 +1,5 @@
 """
-genus.operations.operation
+genus.ops.operation
 ----------------
 Base interface for operations applied on chromosomes.
 """

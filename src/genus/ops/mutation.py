@@ -1,5 +1,5 @@
 """
-genus.operations.mutation
+genus.ops.mutation
 -------------------------
 Code for the mutation of chromosomes.
 """
@@ -9,7 +9,7 @@ from typing import Iterator
 import numpy as np
 
 from genus.chromosome import Chromosome
-from genus.operations.operation import Operation
+from genus.ops.operation import Operation
 
 
 class BinaryMutation(Operation):

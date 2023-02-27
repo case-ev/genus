@@ -1,5 +1,5 @@
 """
-genus.operations
+genus.ops
 ----------------
 Module for the operations that can be applied on a chromosome or population
 of chromosomes.

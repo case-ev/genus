@@ -1,12 +1,12 @@
 """
-genus.operations.elementary
+genus.ops.elementary
 ---------------------------
 Elementary operations between Populations.
 """
 
 from typing import Iterator
 
-from genus.operations.operation import Operation
+from genus.ops.operation import Operation
 from genus.types import concatenate, Concatenable
 
 
