@@ -95,7 +95,7 @@ class TwoParentCrossover(Operation):
         p1 = parents[::2]
         p2 = parents[1::2]
         binary = [0, 1]
-        rand = rng.choice(binary, half_size)
+        rand = rng.choice(binary, half_size, p=(1 - self.cross_probability, self.cross_probability))
         for i, (a, b) in enumerate(zip(p1, p2)):
             if rand[i]:
                 children[[i, half_size + i]] = cross_pair(a, b, self.cross_num)
