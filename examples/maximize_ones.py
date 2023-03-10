@@ -102,7 +102,7 @@ def main(
             else:
                 prog_bar.desc = f"Optimizing, current best {100 * ratio:6.2f}%"
         except BaseException as e:
-            LOGGER.error("Found error %s, safely ending training", e)
+            LOGGER.error("Found error %s, safely ending training", repr(e))
             break
 
     best = population.max_member()
