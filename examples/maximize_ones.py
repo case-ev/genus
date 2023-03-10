@@ -92,25 +92,24 @@ def main(
         _update_function=_diagnostic.add_time,
     )
 
-    for _ in (prog_bar := tqdm(range(generations), desc="Optimizing")):
-        try:
-            population = pipeline(population)
-            best = population.max_member()
-            ratio = _fitness(best) / len(best)
-            if display:
-                prog_bar.desc = f"Optimizing, current best is {100 * ratio:6.2f} {best}%"
-            else:
-                prog_bar.desc = f"Optimizing, current best {100 * ratio:6.2f}%"
-        except BaseException as e:
-            LOGGER.error("Found error %s, safely ending training", repr(e))
-            break
+    prog_bar = tqdm(desc="Optimizing", total=generations, unit="gen")
+    def _prog_bar_hook(runner):
+        best = runner.x.max_member()
+        ratio = _fitness(best) / len(best)
+        prog_bar.update()
+        prog_bar.set_description(f"Optimizing, current best is {100 * ratio:6.2f}% {str(best) * display}")
+
+    runner = genus.Runner(
+        population,
+        pipeline,
+        genus.GenerationCriterion(generations),
+        update_hook=_prog_bar_hook,
+    )
+    runner.run()
 
     best = population.max_member()
     ratio = _fitness(best) / len(best)
-    if display:
-        print(f"Best chromosome {100 * ratio:6.2f} {best}%")
-    else:
-        print(f"Best chromosome {100 * ratio:6.2f}%")
+    print(f"Best chromosome {100 * ratio:6.2f}% {str(best) * display}")
 
     if diagnostic:
         print("\nDiagnostic")
