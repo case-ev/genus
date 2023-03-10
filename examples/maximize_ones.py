@@ -97,7 +97,8 @@ def main(
         best = runner.x.max_member()
         ratio = _fitness(best) / len(best)
         prog_bar.update()
-        prog_bar.set_description(f"Optimizing, current best is {100 * ratio:6.2f}% {str(best) * display}")
+        prog_bar.set_description(f"Optimizing, current best is {100 * ratio:6.2f}% \
+{str(best) * display}")
 
     runner = genus.Runner(
         population,
