@@ -11,10 +11,11 @@ to `torch.nn.Module`, even using similar conventions for some names.
 
 from .crossover import TwoParentCrossover, cross_pair
 from .elementary import Identity, Join
-from .meta_operations import Sequential, Parallel
 from .mutation import BinaryMutation
 from .operation import Operation
+from .parallel import Parallel
 from .selection import ElitismSelection
+from .sequential import Sequential
 
 
 __all__ = [
