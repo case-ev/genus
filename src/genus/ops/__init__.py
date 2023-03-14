@@ -11,6 +11,8 @@ to `torch.nn.Module`, even using similar conventions for some names.
 
 from .crossover import TwoParentCrossover, cross_pair
 from .elementary import Identity, Join
+from .foreach import ForEach
+from .op_lambda import Lambda
 from .mutation import BinaryMutation
 from .operation import Operation
 from .parallel import Parallel
@@ -23,9 +25,11 @@ __all__ = [
     "cross_pair",
     "Identity",
     "Join",
-    "Sequential",
-    "Parallel",
+    "ForEach",
+    "Lambda",
     "BinaryMutation",
     "Operation",
+    "Parallel",
     "ElitismSelection",
+    "Sequential",
 ]
