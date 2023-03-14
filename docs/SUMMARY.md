@@ -14,3 +14,4 @@
     - [Elementary operators](reference/operations/elementary.md)
     - [Genetic operators](reference/operations/genetic.md)
     - [Meta operators](reference/operations/meta.md)
+- [Runner](reference/runner.md)

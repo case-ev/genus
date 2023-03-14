@@ -11,7 +11,10 @@ The general process of implementing a solution in *genus* is:
     - `ElitismSelection` and `TwoParentCrossover` done in parallel, with sizes that preserve the original size of the population.
     - `Join` to resolve the divergence created by `Parallel` by joining both populations.
     - `BinaryMutation` to introduce randomness and allow finding the global maximum.
-4. Iterate as many times as necessary, passing the current population into the pipeline and setting the result of the operation as the current population.
+4. Create a `Runner`, which you can initialize with the defined pipeline and initial population, and in which you can specify a stop criterion that the runner uses to decide when to stop the training.
+5. Run the training and use your results! The last obtained population is contained in the `x` attribute in the runner.
+
+Alternatively, you can manually run each iteration if you need a lower level interface to the training. Also consider that the runner can take an **start hook** and an **update hook**, which are functions that take the runner instance as an input and return nothing: these can be used for any special functionality that you need to add (e.g adding a progress bar to show the progress of the training. For an example of this see the *maximimize_ones* example).
 
 It is important to consider that most operations have hyperparameters that must be passed, which have a great influence on whether the implemented solution works or not. It is up to the user to pass the correct hyperparameters.
 
