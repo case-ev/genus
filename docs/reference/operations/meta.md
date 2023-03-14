@@ -4,3 +4,4 @@ Meta operations are those whose purpose is to call other operations. The current
 
 - `Sequential`: Sequentally calls the given operations, using the output of one operation as the input to the next. This allows for the formation of pipelines of operations, which give rise to complex training sequences.
 - `Parallel`: Runs many operations in parallel, returning the result in a list of populations. This creates a divergence and thus must be resolved using some operation that acts on a list of populations instead of a single one.
+- `ForEach`: Takes any operation and iteratively applies it to each element of the input. For this reason, the input to this function has to be an object you can iterate over
