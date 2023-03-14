@@ -5,4 +5,4 @@ Module that contains the code that handles running the training and
 setting training parameters.
 """
 
-from .runner import *
+from .runner import Runner, StopCriterion, GenerationCriterion, ConvergenceCriterion

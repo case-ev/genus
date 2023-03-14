@@ -8,7 +8,7 @@ using genetic algorithms.
 from . import ops
 from .chromosome import Chromosome
 from .population import Population
-from .runner import Runner, StopCriterion, GenerationCriterion
+from .runner import Runner, StopCriterion, GenerationCriterion, ConvergenceCriterion
 from .types import Concatenable, concatenate
 
 
@@ -21,4 +21,5 @@ __all__ = [
     "Runner",
     "StopCriterion",
     "GenerationCriterion",
+    "ConvergenceCriterion",
 ]
