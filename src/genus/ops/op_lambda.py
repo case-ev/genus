@@ -12,9 +12,9 @@ from genus.ops.operation import Operation
 class Lambda(Operation):
     """Operation for an arbitrary function that is applied to the data."""
 
-    def __init__(self, fn: Callable[[object], object] = lambda x: x) -> None:
+    def __init__(self, fn: Callable[[object], object] = None) -> None:
         super().__init__()
-        self.fn = fn
+        self.fn = fn if fn is not None else lambda x: x
 
     def forward(self, x: object) -> object:
         return self.fn(x)
