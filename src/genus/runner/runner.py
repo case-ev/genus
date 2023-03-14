@@ -96,7 +96,7 @@ class ConvergenceCriterion(StopCriterion):
             return True
 
         fitness = runner.x.max_fitness()
-        if abs(fitness - self.prev_fitness) < self.epsilon:
+        if abs(fitness - self.prev_fitness) <= self.epsilon:
             self.current += 1
 
         if self.current >= self.num:
