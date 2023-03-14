@@ -72,14 +72,7 @@ def main(
     mut_prob = float(mut_prob)
     generations = int(generations)
 
-    LOGGER.info("Creating population")
-    population = genus.Population.from_num(
-        members,
-        chrom_size,
-        _fitness,
-        criterion=criterion,
-        criterion_kwargs={"p": one_prob},
-    )
+    LOGGER.info("Creating pipeline")
     _diagnostic = _Diagnostic()
     pipeline = genus.ops.Sequential(
         genus.ops.Parallel(
@@ -92,6 +85,7 @@ def main(
         _update_function=_diagnostic.add_time,
     )
 
+    LOGGER.info("Creating progress bar")
     prog_bar = tqdm(desc="Optimizing", total=generations, unit="gen")
     def _prog_bar_hook(runner):
         best = runner.x.max_member()
@@ -100,15 +94,24 @@ def main(
         prog_bar.set_description(f"Optimizing, current best is {100 * ratio:6.2f}% \
 {str(best) * display}")
 
+    LOGGER.info("Creating runner")
     runner = genus.Runner(
-        population,
+        genus.Population.from_num(
+            members,
+            chrom_size,
+            _fitness,
+            criterion=criterion,
+            criterion_kwargs={"p": one_prob},
+        ),
         pipeline,
         genus.GenerationCriterion(generations),
         update_hook=_prog_bar_hook,
     )
+    LOGGER.info("Running the training")
     runner.run()
+    LOGGER.info("Finished training")
 
-    best = population.max_member()
+    best = runner.x.max_member()
     ratio = _fitness(best) / len(best)
     print(f"Best chromosome {100 * ratio:6.2f}% {str(best) * display}")
 
