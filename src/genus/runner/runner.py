@@ -5,6 +5,7 @@ Code for the class that runs the training and contains the training parameters.
 """
 
 import abc
+import traceback
 from typing import Callable, Self
 
 from genus_utils.logger import LOGGER
@@ -54,6 +55,7 @@ class Runner:
             while not self.should_stop:
                 self.update()
         except BaseException as e:
+            LOGGER.error(traceback.format_exc())
             LOGGER.error("Found error %s, safely ending training", repr(e))
 
     @property
@@ -91,13 +93,15 @@ class ConvergenceCriterion(StopCriterion):
         self.prev_fitness = 0
 
     def should_stop(self, runner: Runner) -> bool:
-        if runner.generation >= self.max_generations:
+        if self.max_generations is not None and runner.generation >= self.max_generations:
             LOGGER.warning("Reached maximum generations in ConvergenceCriterion")
             return True
 
         fitness = runner.x.max_fitness()
         if abs(fitness - self.prev_fitness) <= self.epsilon:
             self.current += 1
+        else:
+            self.current = 0
 
         if self.current >= self.num:
             return True
