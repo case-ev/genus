@@ -42,6 +42,7 @@ class Runner:
     def update(self):
         """Go to the next generation"""
         LOGGER.debug("Call to update")
+        self.generation += 1
         if self._update_hook is not None:
             self._update_hook(self)
         self.x = self.pipeline(self.x)
@@ -51,7 +52,6 @@ class Runner:
         try:
             self.start(*args, **kwargs)
             while not self.should_stop:
-                self.generation += 1
                 self.update()
         except BaseException as e:
             LOGGER.error("Found error %s, safely ending training", repr(e))
