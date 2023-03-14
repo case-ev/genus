@@ -35,6 +35,7 @@ class Runner:
     def start(self):
         """Start the training"""
         LOGGER.info("Starting training")
+        self.generation = 0
         if self._start_hook is not None:
             self._start_hook(self)
 
