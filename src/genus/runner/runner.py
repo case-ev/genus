@@ -38,7 +38,7 @@ class Runner:
         if self._start_hook is not None:
             self._start_hook(self)
 
-    def update(self) -> bool:
+    def update(self):
         """Go to the next generation"""
         LOGGER.debug("Call to update")
         if self._update_hook is not None:
