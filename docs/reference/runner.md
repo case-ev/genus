@@ -9,4 +9,5 @@ It contains three important methods:
 
 # Stop criterions
 The stop criterions, defined through the `StopCriterion` interface, are objects that implement the `should_stop` method, which takes the runner as an argument and determine whether the simulation should stop or not. You can define custom criterions if necessary, but the currently implemented ones are:
-- `GenerationCriterion`, which stops the simulation once a specified number of generations is reached.
+- `GenerationCriterion(gen_num)`, which stops the simulation once `gen_num` generations are trained.
+- `ConvergenceCriterion(epsilon, num, max_generations: Optional)`, which stops the simulation once the current and previous fitness differ by less than `epsilon` some number of times, specified through the `num` parameter (by default 5). You can optionally pass a parameter `max_generations`, that stops the simulation if `max_generations` generations are trained, logging a warning.

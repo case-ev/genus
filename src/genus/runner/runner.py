@@ -78,3 +78,29 @@ class GenerationCriterion(StopCriterion):
 
     def should_stop(self, runner: Runner) -> bool:
         return runner.generation >= self.gen_num
+
+
+class ConvergenceCriterion(StopCriterion):
+    """Stop when the maximum fitness stops changing"""
+
+    def __init__(self, epsilon: float, num: int = 5, max_generations: int = None) -> None:
+        self.epsilon = epsilon
+        self.num = num
+        self.max_generations = max_generations
+        self.current = 0
+        self.prev_fitness = 0
+
+    def should_stop(self, runner: Runner) -> bool:
+        if runner.generation >= self.max_generations:
+            LOGGER.warning("Reached maximum generations in ConvergenceCriterion")
+            return True
+
+        fitness = runner.x.max_fitness()
+        if abs(fitness - self.prev_fitness) < self.epsilon:
+            self.current += 1
+
+        if self.current >= self.num:
+            return True
+
+        self.prev_fitness = fitness
+        return False
