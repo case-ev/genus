@@ -126,5 +126,5 @@ class Chromosome(Concatenable):
 
     def flip_bits(self, indicators):
         """Flip the bits where `indicators` is 1"""
-        self.code = (self.code + indicators) % 2
+        self.code = self.code ^ indicators
         return self.code
