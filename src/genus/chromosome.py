@@ -109,15 +109,14 @@ class Chromosome(Concatenable):
             Cut up chromosome.
         """
         try:
-            result = [Chromosome(code=self.code[: idx[0]])]
-            result.extend(
-                [Chromosome(code=self.code[p : idx[i + 1]]) for i, p in enumerate(idx[:-1])]
-            )
-            result.append(Chromosome(code=self.code[idx[-1] :]))
+            result = np.empty(len(idx), dtype=Chromosome)
+            result[0] = Chromosome(code=self.code[: idx[0]])
+            for i, p in enumerate(idx[:-1]):
+                result[i + 1] = Chromosome(code=self.code[p : idx[i + 1]])
+            result[-1] = Chromosome(code=self.code[idx[-1] :])
+            return result
         except TypeError:
-            # Raised when there is a single place
-            result = [Chromosome(code=self.code[:idx]), Chromosome(code=self.code[idx:])]
-        return result
+            return np.array([Chromosome(code=self.code[:idx]), Chromosome(code=self.code[idx:])], dtype=Chromosome)
 
     def flip_bit(self, idx):
         """Flip the bit at a given position"""

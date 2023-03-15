@@ -20,7 +20,7 @@ class Population(Concatenable):
         members: List[Chromosome],
         fitness: Callable[[Chromosome], float],
     ) -> None:
-        self.members = members
+        self.members = np.array(members)
         self.fitness = fitness
 
     @classmethod
@@ -54,10 +54,10 @@ class Population(Concatenable):
         """
         criterion_kwargs = {} if criterion_kwargs is None else criterion_kwargs
         return cls(
-            [
+            np.array([
                 Chromosome.from_size(chrom_size, criterion, **criterion_kwargs)
                 for _ in range(member_total)
-            ],
+            ]),
             fitness,
             **kwargs,
         )
@@ -82,7 +82,7 @@ class Population(Concatenable):
 
     def member_fitness(self) -> List[float]:
         """Get the fitness of all members"""
-        return [self.fitness(c) for c in self.members]
+        return np.array([self.fitness(c) for c in self.members])
 
     def max_fitness(self) -> float:
         """Get the max fitness"""
@@ -127,5 +127,5 @@ class Population(Concatenable):
         """
         members = self.members.copy()
         for p in populations:
-            members.extend(p.members)
+            members = np.concatenate((members, p.members))
         return Population(members, self.fitness if fitness is None else fitness)
