@@ -16,6 +16,7 @@ from .op_lambda import Lambda
 from .mutation import BinaryMutation
 from .operation import Operation
 from .parallel import Parallel
+from .replace import ReplaceNWorst
 from .selection import ElitismSelection
 from .sequential import Sequential
 
@@ -30,6 +31,7 @@ __all__ = [
     "BinaryMutation",
     "Operation",
     "Parallel",
+    "ReplaceNWorst",
     "ElitismSelection",
     "Sequential",
 ]
