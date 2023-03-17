@@ -17,14 +17,16 @@ class Parallel(Operation):
         self,
         *operations: Operation,
         _update_function: Callable[[object, Operation], object] = lambda x, op: op(x),
+        workers: int = None,
     ) -> None:
         super().__init__()
         self.operations = operations
         self._update_function = _update_function
+        self.workers = workers
 
     def forward(self, x: object) -> List:
         # Use multithreading to speed up the execution
-        with concurrent.futures.ThreadPoolExecutor() as executor:
+        with concurrent.futures.ThreadPoolExecutor(self.workers) as executor:
             futures = [
                 executor.submit(self._update_function, x, op) for op in self.operations
             ]
