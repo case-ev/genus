@@ -27,7 +27,10 @@ class Parallel(Operation):
 
     def forward(self, x: object) -> List:
         with concurrent.futures.ThreadPoolExecutor(self.workers) as executor:
-            return executor.map(lambda arg: self._update_function(*arg), ((x, op) for op in self.operations))
+            return executor.map(
+                lambda arg: self._update_function(*arg),
+                ((x, op) for op in self.operations),
+            )
 
 
 class ParallelOrdered(Operation):
