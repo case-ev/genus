@@ -5,13 +5,28 @@ Code for the class that runs the training and contains the training parameters.
 """
 
 import abc
+import dataclasses
 import traceback
-from typing import Callable, Self
+from typing import Callable, Self, Tuple
+
+import numpy as np
 
 from genus_utils.logger import LOGGER
 
 from genus.population import Population
 from genus.ops.operation import Operation
+
+
+@dataclasses.dataclass
+class ChromosomeData:
+    """Data of a specific chromosome"""
+    code: np.ndarray
+    parents: Tuple[Self]
+
+    def __str__(self) -> str:
+        if self.parents is not None:
+            return f"{''.join(map(str, self.code))} ({''.join(map(str, self.parents[0].code))}x{''.join(map(str, self.parents[1].code))})"
+        return f"{''.join(map(str, self.code))}"
 
 
 class Runner:
@@ -32,6 +47,7 @@ class Runner:
         self.generation = 0
         self._start_hook = start_hook
         self._update_hook = update_hook
+        self.history = [[ChromosomeData(c.code, c.parents) for c in self.x]]
 
     def start(self):
         """Start the training"""
@@ -47,6 +63,7 @@ class Runner:
         if self._update_hook is not None:
             self._update_hook(self)
         self.x = self.pipeline(self.x)
+        self.history.append([ChromosomeData(c.code, c.parents) for c in self.x])
 
     def run(self, *args, **kwargs):
         """Run the training"""

@@ -55,7 +55,11 @@ def cross_pair(
         # Swap them if the index is odd
         if i % 2 == 1:
             a_components[i], b_components[i] = b_components[i], a_components[i]
-    return concatenate(*a_components), concatenate(*b_components)
+    a_result = concatenate(*a_components)
+    b_result = concatenate(*b_components)
+    a_result.parents = (a, b)
+    b_result.parents = (a, b)
+    return a_result, b_result
 
 
 def _probfn_normalize(pop):

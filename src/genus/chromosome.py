@@ -4,7 +4,7 @@ genus.chromosome
 Code for the creation of chromosomes, which act as the basic data structure.
 """
 
-from typing import List, Self, Iterator
+from typing import List, Self, Iterator, Tuple
 
 import numpy as np
 
@@ -22,14 +22,17 @@ def __chromosome_init_random_binary(size, p=0.5, **_):
 class Chromosome(Concatenable):
     """Chromosome containing some genetic code for an organism"""
 
-    def __init__(self, code: np.ndarray) -> None:
+    def __init__(self, code: np.ndarray, parents: Tuple[Self] = None) -> None:
         self.code = np.array(code, dtype=np.uint8)
         self._size = len(code)
+        self.parents = parents
 
     @classmethod
     def from_str(cls, binary_str: str, *args, **kwargs) -> Self:
         """Create a chromosome from a string"""
-        return cls(np.array(list(map(int, binary_str)), dtype=np.uint8), *args, **kwargs)
+        return cls(
+            np.array(list(map(int, binary_str)), dtype=np.uint8), *args, **kwargs
+        )
 
     @classmethod
     def from_size(cls, size: int, criterion: str = "random_binary", **kwargs) -> Self:
@@ -110,13 +113,21 @@ class Chromosome(Concatenable):
         """
         try:
             result = np.empty(len(idx), dtype=Chromosome)
-            result[0] = Chromosome(code=self.code[: idx[0]])
+            result[0] = Chromosome(code=self.code[: idx[0]], parents=self.parents)
             for i, p in enumerate(idx[:-1]):
-                result[i + 1] = Chromosome(code=self.code[p : idx[i + 1]])
-            result[-1] = Chromosome(code=self.code[idx[-1] :])
+                result[i + 1] = Chromosome(
+                    code=self.code[p : idx[i + 1]], parents=self.parents
+                )
+            result[-1] = Chromosome(code=self.code[idx[-1] :], parents=self.parents)
             return result
         except TypeError:
-            return np.array([Chromosome(code=self.code[:idx]), Chromosome(code=self.code[idx:])], dtype=Chromosome)
+            return np.array(
+                [
+                    Chromosome(code=self.code[:idx], parents=self.parents),
+                    Chromosome(code=self.code[idx:], parents=self.parents),
+                ],
+                dtype=Chromosome,
+            )
 
     def flip_bit(self, idx):
         """Flip the bit at a given position"""
