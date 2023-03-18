@@ -112,7 +112,7 @@ class Chromosome(Concatenable):
             Cut up chromosome.
         """
         try:
-            result = np.empty(len(idx), dtype=Chromosome)
+            result = np.empty(len(idx) + 1, dtype=Chromosome)
             result[0] = Chromosome(code=self.code[: idx[0]], parents=self.parents)
             for i, p in enumerate(idx[:-1]):
                 result[i + 1] = Chromosome(
