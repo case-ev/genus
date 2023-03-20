@@ -78,6 +78,14 @@ def _softmax(pop):
     return exp_fitness / exp_fitness.sum()
 
 
+def _normalized_softmax(pop):
+    # We normalize to avoid overflows
+    fitness_vals = np.array(pop.member_fitness())
+    fitness_vals = (fitness_vals - fitness_vals.mean()) / fitness_vals.std()
+    exp_fitness = np.exp(fitness_vals)
+    return exp_fitness / exp_fitness.sum()
+
+
 class TwoParentCrossover(Operation):
     """Crossover operation which uses two parents"""
 
@@ -86,7 +94,7 @@ class TwoParentCrossover(Operation):
         size=None,
         cross_num=1,
         cross_probability=1,
-        probability_function: Callable[[Population], float] = _softmax,
+        probability_function: Callable[[Population], float] = _normalized_softmax,
     ) -> None:
         super().__init__()
         self.size = size
