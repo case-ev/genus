@@ -9,7 +9,9 @@ def _basic_fitness(chromosome):
 
 def test_basic():
     """Test elitism with a basic fitness function"""
-    chromosomes = [genus.Chromosome.from_str("1" * i + "0" * (10 - i)) for i in range(11)]
+    chromosomes = [
+        genus.Chromosome.from_str("1" * i + "0" * (10 - i)) for i in range(11)
+    ]
     sel = genus.ops.ElitismSelection(5)
     chosen = sel(genus.Population(chromosomes, _basic_fitness))
     assert len(chosen) == 5

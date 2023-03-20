@@ -54,10 +54,12 @@ class Population(Concatenable):
         """
         criterion_kwargs = {} if criterion_kwargs is None else criterion_kwargs
         return cls(
-            np.array([
-                Chromosome.from_size(chrom_size, criterion, **criterion_kwargs)
-                for _ in range(member_total)
-            ]),
+            np.array(
+                [
+                    Chromosome.from_size(chrom_size, criterion, **criterion_kwargs)
+                    for _ in range(member_total)
+                ]
+            ),
             fitness,
             **kwargs,
         )
@@ -108,7 +110,9 @@ class Population(Concatenable):
         """Get the standard deviation of fitness"""
         return np.std(self.member_fitness())
 
-    def concatenate(self, *populations, fitness: Callable[[Chromosome], float] = None, **_) -> Self:
+    def concatenate(
+        self, *populations, fitness: Callable[[Chromosome], float] = None, **_
+    ) -> Self:
         """Concatenate this population to a series of other populations. If
         no fitness function is given, it takes the one from this population.
 

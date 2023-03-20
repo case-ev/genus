@@ -20,6 +20,7 @@ from genus.ops.operation import Operation
 @dataclasses.dataclass
 class ChromosomeData:
     """Data of a specific chromosome"""
+
     code: np.ndarray
     parents: Tuple[Self]
 
@@ -102,7 +103,9 @@ class GenerationCriterion(StopCriterion):
 class ConvergenceCriterion(StopCriterion):
     """Stop when the maximum fitness stops changing"""
 
-    def __init__(self, epsilon: float, num: int = 5, max_generations: int = None) -> None:
+    def __init__(
+        self, epsilon: float, num: int = 5, max_generations: int = None
+    ) -> None:
         self.epsilon = epsilon
         self.num = num
         self.max_generations = max_generations
@@ -110,7 +113,10 @@ class ConvergenceCriterion(StopCriterion):
         self.prev_fitness = 0
 
     def should_stop(self, runner: Runner) -> bool:
-        if self.max_generations is not None and runner.generation >= self.max_generations:
+        if (
+            self.max_generations is not None
+            and runner.generation >= self.max_generations
+        ):
             LOGGER.warning("Reached maximum generations in ConvergenceCriterion")
             return True
 

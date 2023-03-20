@@ -87,12 +87,15 @@ def main(
 
     LOGGER.info("Creating progress bar")
     prog_bar = tqdm(desc="Optimizing", total=generations, unit="gen")
+
     def _prog_bar_hook(runner):
         best = runner.x.max_member()
         ratio = _fitness(best) / len(best)
         prog_bar.update()
-        prog_bar.set_description(f"Optimizing, current best is {100 * ratio:6.2f}% \
-{str(best) * display}")
+        prog_bar.set_description(
+            f"Optimizing, current best is {100 * ratio:6.2f}% \
+{str(best) * display}"
+        )
 
     LOGGER.info("Creating runner")
     runner = genus.Runner(
@@ -148,7 +151,9 @@ def main(
                 )
                 ax.scatter(x, times, label="raw", alpha=0.5)
                 ax.plot(x, result_avg, label="\u03bc")
-                ax.fill_between(x, std_m, std_p, alpha=0.25, color="#555", label="\u03c3")
+                ax.fill_between(
+                    x, std_m, std_p, alpha=0.25, color="#555", label="\u03c3"
+                )
             ax.legend()
 
         plt.show()
